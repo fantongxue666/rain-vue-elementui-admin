@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setAccount, getAccount } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
@@ -31,16 +31,16 @@ const mutations = {
 const actions = {
   
   login({ commit }, userInfo) {
-    debugger;
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ account: username.trim(), pwd: password }).then(response => {
-        debugger;
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
+        setAccount(data.account)
         resolve()
       }).catch(error => {
+        console.log("登录失败")
         reject(error)
       })
     })
@@ -49,22 +49,21 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
+      getInfo(getAccount()).then(response => {
+        const data = response.data
+        if (data==null) {
+          reject('用户信息获取失败，请重新登录')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { powerList, username,avatar,introduction } = data
 
         // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+        if (!powerList || powerList.length <= 0) {
+          reject('用户权限不能为空')
         }
 
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
+        commit('SET_ROLES', powerList)
+        commit('SET_NAME', username)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
         resolve(data)

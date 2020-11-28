@@ -25,6 +25,7 @@ router.beforeEach(async(to, from, next) => {
 
   // 确定用户是否已登录，这里的getToken（）就是上面导入的auth.js的getToken方法
   const hasToken = getToken()
+  console.log(hasToken)
 
   //如果存在token
   if (hasToken) {
@@ -45,10 +46,10 @@ router.beforeEach(async(to, from, next) => {
           const { roles } = await store.dispatch('user/getInfo')
 
           //根据后台返回数据（可访问的路由表）
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          const accessRoutes = await store.dispatch('user/getInfo')
 
           // 动态挂载路由
-          router.addRoutes(accessRoutes)
+          router.addRoutes(accessRoutes.powerList)
           next({ ...to, replace: true })
         } catch (error) {
           console.log("获取roles失败，并返回登录页")

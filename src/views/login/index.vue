@@ -154,9 +154,9 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        if (valid) {
+        if (valid) {  
           this.loading = true
-          //这句话是去vuex里或取login接口的
+          //这句话是去vuex里获取login接口的
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
