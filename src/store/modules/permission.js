@@ -1,4 +1,6 @@
 import { asyncRoutes, constantRoutes } from '@/router'
+import { getRoutes } from '@/api/role';
+import { getToken, setToken, removeToken, setAccount, getAccount } from '@/utils/auth'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -47,17 +49,52 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ commit }, roles) {
+  generateRoutes({ commit }) {
     return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      let accessRoutes=[]
+      getRoutes(getAccount()).then(response => {
+        //组装动态路由
+         accessRoutes=getTreeRoutes(response.data,0)
+        commit('SET_ROUTES',accessRoutes)
+        resolve(accessRoutes)
+      })
+      
+     
     })
+  }
+}
+
+/**
+ * 生成动态路由层级列表
+ */
+export function getTreeRoutes(list, parentId) {
+  
+  const children=[]
+  list.forEach(item=>{
+    const res=dataToRoutes(item)
+    //如果是一级节点
+    if(item.parentid===parentId){
+      //设置该元素的子元素
+      res.children=getTreeRoutes(list,item.id)
+      children.push(res)
+    }
+  })
+  return children
+}
+
+/**
+ * 将data转为路由格式
+ */
+export function dataToRoutes(data){
+  return {
+    path:data.url,
+    name:data.name,
+    component:() => import(data.component),
+    meta:{
+      title:data.name,
+      icon:data.icon ? data.icon : 'icon'
+    },
+    children:[]
   }
 }
 

@@ -44,12 +44,19 @@ router.beforeEach(async(to, from, next) => {
         try {
           //如果存在token，但是没有角色信息，则是第一次登录，getInfo请求用户信息并存储
           const { roles } = await store.dispatch('user/getInfo')
-
           //根据后台返回数据（可访问的路由表）
-          const accessRoutes = await store.dispatch('user/getInfo')
+        //    store.dispatch('permission/generateRoutes').then(res=>{
+        //      debugger
+        //      // 动态挂载路由
+        //     router.addRoutes(res)
+        //     next({ ...to, replace: true })
+        //   }).catch( err => {
+        //     console.log(err);
+        // })
 
-          // 动态挂载路由
-          router.addRoutes(accessRoutes.powerList)
+        const accessRoutes = await store.dispatch('permission/generateRoutes')
+          // // 动态挂载路由
+          router.addRoutes(accessRoutes)
           next({ ...to, replace: true })
         } catch (error) {
           console.log("获取roles失败，并返回登录页")

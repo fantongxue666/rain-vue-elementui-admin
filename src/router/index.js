@@ -13,30 +13,28 @@ import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
 
 /**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
+ * 注意: 子菜单只在路由子菜单时出现。长度> = 1
+ * 参考网址: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
+ * hidden: true                   如果设置为true，项目将不会显示在侧栏中(默认为false)
+ * alwaysShow: true               如果设置为true，将始终显示根菜单
+ *                                如果不设置alwaysShow, 当项目有多个子路由时，它将成为嵌套模式，否则不显示根菜单
+ * redirect: noRedirect           如果设置noRedirect，则不会在面包屑中重定向
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    roles: ['admin','editor']    控制页面角色(可以设置多个角色)
+    title: 'title'               名称显示在侧边栏和面包屑(推荐集)
+    icon: 'svg-name'             图标显示在侧栏中
+    breadcrumb: false            如果设置为false，则该项将隐藏在breadcrumb中(默认为true)
+    activeMenu: '/example/list'  如果设置路径，侧栏将突出显示您设置的路径
   }
  */
 
 /**
  * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
+ * 没有权限要求的基本页
+ * 所有角色都可以访问
+ * 不需要动态判断权限的路由
  */
 export const constantRoutes = [
   {
@@ -124,10 +122,8 @@ export const constantRoutes = [
   }
 ]
 
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
+//异步挂载的路由
+//动态需要根据权限加载的路由表 
 export const asyncRoutes = [
   {
     path: '/permission',

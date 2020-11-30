@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function getRoutes() {
+export function getRoutes(account) {
   return request({
-    url: '/vue-element-admin/routes',
-    method: 'get'
+    url: '/getTreeList',
+    method: 'get',
+    params:{account}
   })
 }
 
