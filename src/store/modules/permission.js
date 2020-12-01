@@ -1,4 +1,4 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { asyncRoutes, constantRoutes, routeMap } from '@/router'
 import { getRoutes } from '@/api/role';
 import { getToken, setToken, removeToken, setAccount, getAccount } from '@/utils/auth'
 
@@ -89,7 +89,7 @@ export function dataToRoutes(data){
   return {
     path:data.url,
     name:data.name,
-    component:() => import(data.component),
+    component:data.parentid===0 ? routeMap['Layout'] : routeMap[data.component],
     meta:{
       title:data.name,
       icon:data.icon ? data.icon : 'icon'

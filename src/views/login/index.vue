@@ -76,7 +76,7 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
-
+import { Message } from 'element-ui'
 export default {
   name: 'Login',
   components: { SocialSign },
@@ -160,13 +160,15 @@ export default {
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              Message.success('登录成功')
               this.loading = false
             })
             .catch(() => {
               this.loading = false
+              Message.error('登陆失败')
             })
         } else {
-          console.log('error submit!!')
+          Message.error('登陆失败')
           return false
         }
       })

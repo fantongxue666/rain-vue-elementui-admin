@@ -389,6 +389,19 @@ const createRouter = () => new Router({
   routes: constantRoutes
 })
 
+export const routeMap={
+  Layout:Layout,
+  ICON:()=>import('@/views/icons/index'),
+  ROLE:()=>import('@/views/permission/role'),
+  LIST:()=>import('@/views/example/list'),
+  TAB:()=>import('@/views/tab/index'),
+  ARTICLE_LIST:()=>import('@/views/example/list'),
+  ARTICLE_CREATE:()=>import('@/views/example/create'),
+  ARTICLE_EDIT:()=>import('@/views/example/edit'),
+  DIRECTIVE:()=>import('@/views/permission/directive')
+  
+}
+
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
