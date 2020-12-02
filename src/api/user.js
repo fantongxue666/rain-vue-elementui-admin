@@ -22,3 +22,11 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getRoleList(data){
+  return request({
+    url:'/getRoleList',
+    method:'post',
+    data
+  })
+}

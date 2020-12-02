@@ -24,17 +24,19 @@
       <el-table-column label="角色名称" width="120">
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
-            <p>姓名: {{ scope.row.name }}</p>
+            <p>姓名: {{ scope.row.rolename }}</p>
             <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">{{ scope.row.name }}</el-tag>
+              <el-tag size="medium">{{ scope.row.rolename }}</el-tag>
             </div>
           </el-popover>
         </template>
       </el-table-column>
       <el-table-column label="角色状态">
-        <el-switch
+        <el-switch  slot-scope="scope"
+        active-value="1"
+        inactive-value="2"
           style="display: block;z-index:999;"
-          v-model="value"
+          v-model="scope.row.wlbz"
           active-color="#13ce66"
           inactive-color="#ff4949"
           active-text="启用"
@@ -44,11 +46,15 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="dialogFormVisible = true">授权</el-button>
+          <el-button size="mini" type="primary" @click="dialogFormVisible = true">修改角色</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除角色</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+    <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+     background layout="prev, pager, next" :total="totalCount"></el-pagination>
 
     <!-- 新增角色弹框 -->
     <el-dialog title="新增角色信息" :visible.sync="dialogFormVisible1">
@@ -83,9 +89,19 @@
 
 <script>
 import { Message } from "element-ui";
+import { getRoleList } from '../../api/user';
+import service from '../../utils/request';
+
 export default {
   data() {
     return {
+        pagesize:3,    //    每页的数据
+        currentPage:1,//第几页
+        totalCount:1,//总条数 
+        pages:1,  //总页数
+        form:{
+            name:""
+        },
       treeData: [
         {
           id: 1,
@@ -144,14 +160,27 @@ export default {
       },
       value: true,
       tableData: [
-        {
-          id: "df8s90g78sdf90gsdf09g67",
-          name: "管理员"
-        }
+       
       ]
     };
   },
+  created(){
+      
+      this.getData(this.currentPage,this.pagesize)
+      
+  },
   methods: {
+      handleCurrentChange(val){
+        this.currentPage = val
+        this.getData(val,this.pagesize)
+      },
+    getData(v,j){
+        getRoleList({pageNo:v,pageSize:j}).then(res=>{
+          this.tableData=res.data.list
+          this.totalCount=res.data.total
+          this.pages=res.data.pages
+      })
+    },
     onSubmit() {
       console.log("submit!");
     },

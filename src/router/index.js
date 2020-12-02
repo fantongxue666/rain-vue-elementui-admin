@@ -61,11 +61,12 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/guide',
+    redirect: '/documentation/index',
   },
   {
     path: '/documentation',
     component: Layout,
+    // redirect: '/documentation/index',
     children: [
       {
         path: 'index',
