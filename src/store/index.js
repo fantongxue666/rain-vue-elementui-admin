@@ -18,6 +18,9 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 }, {})
 
 const store = new Vuex.Store({
+  state: {
+    isLoading: false//loading全局开关
+    },
   modules,
   getters
 })

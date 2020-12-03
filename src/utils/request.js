@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import { MessageBox, Message,Loading } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -9,10 +9,11 @@ const service = axios.create({
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
-
 // request interceptor
+let loading=null
 service.interceptors.request.use(
   config => {
+    store.state.isLoading = true
     if (store.getters.token) {
       config.headers['RAINSHIRO-TOKEN'] = getToken()
     }
@@ -29,6 +30,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 
   response => {
+    store.state.isLoading = false
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.

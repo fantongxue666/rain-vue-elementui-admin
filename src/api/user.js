@@ -30,3 +30,18 @@ export function getRoleList(data){
     data
   })
 }
+
+export function addRoleUser(data){
+  return request({
+    url:'/addRoleUser',
+    method:'post',
+    data
+  })
+}
+export function updateRoleUser(data){
+  return request({
+    url:'/updateRoleUser',
+    method:'post',
+    data
+  })
+}
