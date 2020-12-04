@@ -45,3 +45,10 @@ export function updateRoleUser(data){
     data
   })
 }
+export function deleteRoleUser(id){
+  return request({
+    url:'/deleteRoleUser',
+    method:'get',
+    params:{id}
+  })
+}

@@ -2,6 +2,8 @@ import axios from 'axios'
 import { MessageBox, Message,Loading } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import Vue from 'vue'
+Vue.prototype.$http=axios
 
 // create an axios instance
 const service = axios.create({
@@ -10,7 +12,6 @@ const service = axios.create({
   timeout: 5000 // request timeout
 })
 // request interceptor
-let loading=null
 service.interceptors.request.use(
   config => {
     store.state.isLoading = true

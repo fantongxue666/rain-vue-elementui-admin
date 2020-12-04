@@ -68,7 +68,7 @@
         </el-form-item>
       </el-form>
       <el-form :model="form">
-        <el-form-item label="是否立即启用" :label-width="formLabelWidth">
+        <el-form-item label="是否启用" :label-width="formLabelWidth">
           <el-switch
             active-value="1"
             inactive-value="2"
@@ -130,12 +130,12 @@
 
 <script>
 import { Message } from "element-ui";
-import { getRoleList, addRoleUser, updateRoleUser } from "../../api/user";
+import { getRoleList, addRoleUser, updateRoleUser,deleteRoleUser } from "../../api/user";
 import service from "../../utils/request";
 export default {
   data() {
     return {
-      pagesize: 8, //    每页的数据
+      pagesize: 10, //    每页的数据
       currentPage: 1, //第几页
       totalCount: 1, //总条数
       pages: 1, //总页数
@@ -279,10 +279,15 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.$message({
-          type: "success",
-          message: "删除成功!"
-        });
+        deleteRoleUser(row.id).then(res=>{
+          if(res.code===200){
+              Message.success('删除成功')
+              this.getData(this.currentPage, this.pagesize);
+          }else{
+              Message.error(res.message)
+          }
+        })
+        
       });
     }
   }

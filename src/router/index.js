@@ -1,16 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 Vue.use(Router)
-
-/* Layout */
 import Layout from '@/layout'
-
-/* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
 
 /**
  * 注意: 子菜单只在路由子菜单时出现。长度> = 1
@@ -119,59 +110,6 @@ export const constantRoutes = [
 //异步挂载的路由
 //动态需要根据权限加载的路由表 
 export const asyncRoutes = [
-  // {
-  //   path: '/permission',
-  //   component: Layout,
-  //   redirect: '/permission/page',
-  //   alwaysShow: true, // will always show the root menu
-  //   name: 'Permission',
-  //   meta: {
-  //     title: 'Permission',
-  //     icon: 'lock',
-  //     roles: ['admin', 'editor'] // you can set roles in root nav
-  //   },
-  //   children: [
-  //     {
-  //       path: 'page',
-  //       component: () => import('@/views/permission/page'),
-  //       name: 'PagePermission',
-  //       meta: {
-  //         title: 'Page Permission',
-  //         roles: ['admin'] // or you can only set roles in sub nav
-  //       }
-  //     },
-  //     {
-  //       path: 'directive',
-  //       component: () => import('@/views/permission/directive'),
-  //       name: 'DirectivePermission',
-  //       meta: {
-  //         title: 'Directive Permission'
-  //         // if do not set roles, means: this page does not require permission
-  //       }
-  //     },
-  //     {
-  //       path: 'role',
-  //       component: () => import('@/views/permission/role'),
-  //       name: 'RolePermission',
-  //       meta: {
-  //         title: 'Role Permission',
-  //         roles: ['admin']
-  //       }
-  //     }
-  //   ]
-  // },
-
-
-
-  /** when your routing map is too long, you can split it into small modules **/
-  // componentsRouter,
-  // chartsRouter,
-  // nestedRouter,
-  // tableRouter,
-
-  
-
-  // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
@@ -183,8 +121,11 @@ const createRouter = () => new Router({
 
 export const routeMap={
   Layout:Layout,
-  POWERPAGE:()=>import('@/views/rain_power/power_list')
-  // POWERPAGE:()=>import('@/views/table/inline-edit-table')
+  POWERPAGE:()=>import('@/views/rain_power/power_list'),
+  USERS:()=>import('@/views/rain_user/user_list')
+  
+
+
 }
 
 const router = createRouter()
