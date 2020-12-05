@@ -16,7 +16,7 @@ service.interceptors.request.use(
   config => {
     store.state.isLoading = true
     if (store.getters.token) {
-      config.headers['RAINSHIRO-TOKEN'] = getToken()
+      config.headers['MY-TOKEN'] = getToken()
     }
     return config
   },

@@ -16,13 +16,13 @@
       </el-form-item>
     </el-form>
     <el-table :data="tableData" style="width: 100%;height:550px;overflow:scroll;">
-      <el-table-column label="角色编号" width="300">
+      <el-table-column label="角色编号">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span style="margin-left: 10px">{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色名称" width="220">
+      <el-table-column label="角色名称">
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
             <p>姓名: {{ scope.row.rolename }}</p>
@@ -32,7 +32,7 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="角色状态" width="200">
+      <el-table-column label="角色状态">
         <el-switch
           slot-scope="scope"
           active-value="1"
@@ -46,7 +46,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="dialogFormVisible = true">授权</el-button>
+          <el-button size="mini" @click="getTreeByAccount(scope.$index,scope.row)">授权</el-button>
           <el-button size="mini" type="primary" @click="toEditUser(scope.$index,scope.row)">修改角色</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除角色</el-button>
         </template>
@@ -113,11 +113,12 @@
     <!-- 授权弹框    -->
     <el-dialog title="角色授权" :visible.sync="dialogFormVisible">
       <el-tree
+        ref="tree"
         :data="treeData"
         show-checkbox
         node-key="id"
-        :default-expanded-keys="[2, 3]"
-        :default-checked-keys="[5]"
+        :default-expanded-keys="idss"
+        :default-checked-keys="ids"
         :props="defaultProps"
       ></el-tree>
       <div slot="footer" class="dialog-footer">
@@ -130,11 +131,14 @@
 
 <script>
 import { Message } from "element-ui";
-import { getRoleList, addRoleUser, updateRoleUser,deleteRoleUser } from "../../api/user";
+import { getRoleList, addRoleUser, updateRoleUser,deleteRoleUser,getMenuByRole,saveRoles } from "../../api/user";
 import service from "../../utils/request";
+import { getRoutes } from '../../api/role';
+import { getAccount } from '../../utils/auth';
 export default {
   data() {
     return {
+      roleid:'',
       pagesize: 10, //    每页的数据
       currentPage: 1, //第几页
       totalCount: 1, //总条数
@@ -143,56 +147,7 @@ export default {
         name: "",
         status: ""
       },
-      treeData: [
-        {
-          id: 1,
-          label: "一级 1",
-          children: [
-            {
-              id: 4,
-              label: "二级 1-1",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1"
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: 2,
-          label: "一级 2",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1"
-            },
-            {
-              id: 6,
-              label: "二级 2-2"
-            }
-          ]
-        },
-        {
-          id: 3,
-          label: "一级 3",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1"
-            },
-            {
-              id: 8,
-              label: "二级 3-2"
-            }
-          ]
-        }
-      ],
+      treeData: [],
       dialogFormVisible: false,
       dialogFormVisible1: false,
       dialogFormVisible2: false,
@@ -203,7 +158,9 @@ export default {
       },
       value: true,
       tableData: [],
-      fullscreenLoading: false
+      // fullscreenLoading: false,
+      ids:[],
+      idss:[]
     };
   },
   created() {
@@ -211,6 +168,26 @@ export default {
   },
 
   methods: {
+    //通过账号查询Tree
+    getTreeByAccount(e,j){
+      this.ids=[]
+      this.dialogFormVisible = true
+      this.roleid=j.id
+      getMenuByRole(j.id).then(res=>{
+        if(res.data.length>0){
+            for(var i=0;i<res.data.length;i++){
+              this.idss.push(res.data[i].id)
+            }
+          this.treeData=res.data
+          this.ids=res.data[0].ids
+        }else{
+          this.ids=[]
+          this.idss=[]
+        }
+      })
+
+
+    },
     toEditUser(e, f) {
       this.formInline.user = f.rolename;
       this.formInline.region = f.wlbz;
@@ -270,7 +247,13 @@ export default {
     },
     handleEdit() {
       this.dialogFormVisible = false;
-      Message.success("授权成功");
+      const ids=this.$refs.tree.getCheckedKeys()
+      saveRoles(this.roleid,ids).then(res=>{
+        if(res.code===200){
+           Message.success("授权成功");
+        }
+      })
+     
     },
     handleDelete(index, row) {
       console.log(index, row);

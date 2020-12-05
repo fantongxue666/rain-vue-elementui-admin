@@ -52,3 +52,28 @@ export function deleteRoleUser(id){
     params:{id}
   })
 }
+
+export function getMenuByRole(roleid){
+  return request({
+    url:'/getMenuByRole',
+    method:'get',
+    params:{roleid}
+  })
+}
+
+
+export function saveRoles(roleid,powerids){
+  return request({
+    url:'/saveRoles?roleid='+roleid+'&powerids='+powerids,
+    method:'get'
+  })
+}
+
+
+export function getAuthUserList(data){
+  return request({
+    url:'/getAuthUserList',
+    method:'post',
+    data
+  })
+}
