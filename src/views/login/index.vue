@@ -160,7 +160,7 @@ export default {
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({ path: '/', query: this.otherQuery })
-              Message.success('登录成功')
+              // Message.success('登录成功')
               this.loading = false
             })
             .catch(() => {

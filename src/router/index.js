@@ -122,8 +122,8 @@ const createRouter = () => new Router({
 export const routeMap={
   Layout:Layout,
   POWERPAGE:()=>import('@/views/rain_power/power_list'),
-  USERS:()=>import('@/views/rain_user/user_list')
-  
+  USERS:()=>import('@/views/rain_user/user_list'),
+  IMPORTEXCEL:()=>import('@/views/rain_user/user_list')
 
 
 }

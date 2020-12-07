@@ -58,9 +58,9 @@ const actions = {
         const { powerList, username,avatar,introduction } = data
 
         // roles must be a non-empty array
-        // if (!powerList || powerList.length <= 0) {
-        //   reject('当前用户没有任何菜单的权限，请联系管理员分配权限')
-        // }
+        if (!powerList || powerList.length <= 0) {
+          reject('当前用户没有任何菜单的权限，请联系管理员分配权限')
+        }
 
         commit('SET_ROLES', powerList)
         commit('SET_NAME', username)

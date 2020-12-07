@@ -248,7 +248,9 @@ export default {
     handleEdit() {
       this.dialogFormVisible = false;
       const ids=this.$refs.tree.getCheckedKeys()
-      saveRoles(this.roleid,ids).then(res=>{
+      const halfIds=this.$refs.tree.getHalfCheckedKeys()
+      const resultIds=ids.concat(halfIds)
+      saveRoles(this.roleid,resultIds).then(res=>{
         if(res.code===200){
            Message.success("授权成功");
         }
